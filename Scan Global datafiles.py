@@ -5,6 +5,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import urllib
 import datetime
+import shutil
 
 Path_source = r'\\filsrv01\bki\11. Økonomi\04 - Controlling\NMO\1. Produktion\Råkaffe\Scan Global filer'
 Path_archive = r'\\filsrv01\bki\11. Økonomi\04 - Controlling\NMO\1. Produktion\Råkaffe\Scan Global filer\Arkiv'
@@ -45,4 +46,6 @@ if os.path.exists( File_complete): # Check if file exists
     Df_sg.to_sql('Container_data' ,con=Engine ,schema=Schema ,if_exists='append' ,index=False) # Insert into SQL
     Df_log.to_sql('Log' ,con=Engine ,schema='dbo' ,if_exists='append' ,index=False) # Write to log
 
-print( Df_sg )
+    shutil.move(File_complete_new ,Path_archive + File_name_new)
+
+# shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
