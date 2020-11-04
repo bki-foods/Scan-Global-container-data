@@ -47,5 +47,3 @@ if os.path.exists( File_complete): # Check if file exists
     Df_log.to_sql('Log' ,con=Engine ,schema='dbo' ,if_exists='append' ,index=False) # Write to log
 
     shutil.move(File_complete_new ,Path_archive + File_name_new)
-
-# shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
