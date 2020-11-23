@@ -18,7 +18,7 @@ File_complete_new = Path_source + File_name_new # New file name
 Server = 'sqlsrv04'
 Db = 'BKI_Datastore'
 Schema = 'cof'
-Params = urllib.parse.quote_plus('DRIVER={SQL Server Native Client 10.0};SERVER=' + Server +';DATABASE=' + Db +';Trusted_Connection=yes')
+Params = urllib.parse.quote_plus('DRIVER={SQL Server Native Client 11.0};SERVER=' + Server +';DATABASE=' + Db +';Trusted_Connection=yes')
 Engine = create_engine('mssql+pyodbc:///?odbc_connect=%s' % Params)
 
 Timestamp = datetime.datetime.now()
