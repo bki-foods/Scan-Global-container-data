@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 import urllib
 import datetime
 import shutil
+import numpy as np
 
 Path_source = r'\\filsrv01\bki\11. Økonomi\04 - Controlling\NMO\1. Produktion\Råkaffe\Scan Global filer'
 Path_archive = r'\\filsrv01\bki\11. Økonomi\04 - Controlling\NMO\1. Produktion\Råkaffe\Scan Global filer\Arkiv'
@@ -40,9 +41,10 @@ if os.path.exists( File_complete): # Check if file exists
     Df_sg = pd.DataFrame.from_dict(Dic_file) # Read dictionary into dataframe
     Df_sg = Df_sg.rename(columns=Cols_df_sg_rename) #Rename columns
     Df_sg = Df_sg[Cols_df_sg] # Limit columns to those present in SQL target table
+    Df_sg = Df_sg.replace({'nan': None , 'NONE': None}) # Convert NaN values to 0 before SQL insert
     Df_sg.loc[:, 'Timestamp'] = Timestamp
     Df_sg.loc[:, 'Filnavn'] = File_name_new
-    
+ 
     Df_sg.to_sql('Container_data' ,con=Engine ,schema=Schema ,if_exists='append' ,index=False) # Insert into SQL
     Df_log.to_sql('Log' ,con=Engine ,schema='dbo' ,if_exists='append' ,index=False) # Write to log
 
