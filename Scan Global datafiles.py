@@ -28,7 +28,7 @@ Script_name = 'Scan Global datafiles.py'
 Cols_df_sg_rename = {'BKI REF#':'Kontraktnummer' ,'B/L':'Bill_of_lading' ,'NETTO VÆGT':'Nettovægt'
                      ,'BRUTTO VÆGT':'Bruttovægt' ,'CONTAINER NO.':'Containernummer' ,'SEGL':'Segl'
                      ,'DEPOT UD-LEVERING': 'Udlevering_depot' ,'UDLEVERING REFERENCE':'Udlevering_reference'
-                     ,'DEPOT IND-LEVERING':'Indlevering_depot','INDLEVERING REFERENCE':'Indlevering_reference'}
+                     ,'DEPOTIND-LEVERING':'Indlevering_depot','INDLEVERING REFERENCE':'Indlevering_reference'}
 Cols_df_sg = ['Kontraktnummer' ,'Containernummer' ,'Bill_of_lading' ,'Nettovægt' ,'Bruttovægt' ,'Segl' 
               ,'Udlevering_depot' ,'Udlevering_reference' ,'Indlevering_depot' ,'Indlevering_reference']
 
@@ -39,6 +39,7 @@ if os.path.exists( File_complete): # Check if file exists
     
     Dic_file = pd.read_excel(File_complete_new, header=0).to_dict() # Read file into dictionary
     Df_sg = pd.DataFrame.from_dict(Dic_file) # Read dictionary into dataframe
+    Df_sg.columns = Df_sg.columns.str.replace('\n', '') # Replace newline characters from column headers
     Df_sg = Df_sg.rename(columns=Cols_df_sg_rename) #Rename columns
     Df_sg = Df_sg[Cols_df_sg] # Limit columns to those present in SQL target table
     Df_sg = Df_sg.replace({'nan': None , 'NONE': None}) # Convert NaN values to 0 before SQL insert
