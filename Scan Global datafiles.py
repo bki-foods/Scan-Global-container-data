@@ -8,8 +8,8 @@ import datetime
 import shutil
 
 
-Path_source = r'\\filsrv01\bki\11. Økonomi\04 - Controlling\NMO\1. Produktion\Råkaffe\Scan Global filer'
-Path_archive = r'\\filsrv01\bki\11. Økonomi\04 - Controlling\NMO\1. Produktion\Råkaffe\Scan Global filer\Arkiv'
+Path_source = r'\\appsrv07\Python filer\Scan Global filer'
+Path_archive = r'\\appsrv07\Python filer\Scan Global filer\Arkiv'
 File_name = r'\BKI Scan Global data'
 File_complete = Path_source + File_name + '.xlsx'
 File_timestamp = os.path.getctime(File_complete) # Creation time of file
