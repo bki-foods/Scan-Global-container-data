@@ -16,11 +16,10 @@ File_timestamp = os.path.getctime(File_complete) # Creation time of file
 File_name_new = File_name + '_' + str(File_timestamp) + '.xlsx' # New file name
 File_complete_new = Path_source + File_name_new # New file name
 
-Server = 'sqlsrv04'
-Db = 'BKI_Datastore'
-Schema = 'cof'
-Params = urllib.parse.quote_plus('DRIVER={SQL Server Native Client 11.0};SERVER=' + Server +';DATABASE=' + Db +';Trusted_Connection=yes')
-Engine = create_engine('mssql+pyodbc:///?odbc_connect=%s' % Params)
+server_04 = "sqlsrv04"
+db_ds = "BKI_Datastore"
+params_ds = f"DRIVER={{SQL Server Native Client 11.0}};SERVER={server_04};DATABASE={db_ds};trusted_connection=yes"
+con_ds = create_engine('mssql+pyodbc:///?odbc_connect=%s' % urllib.parse.quote_plus(params_ds))
 
 Timestamp = datetime.datetime.now()
 Script_name = 'Scan Global datafiles.py'
@@ -47,8 +46,8 @@ try:
         Df_sg.loc[:, 'Timestamp'] = Timestamp
         Df_sg.loc[:, 'Filnavn'] = File_name_new
      
-        Df_sg.to_sql('Container_data' ,con=Engine ,schema=Schema ,if_exists='append' ,index=False) # Insert into SQL
-        Df_log.to_sql('Log' ,con=Engine ,schema='dbo' ,if_exists='append' ,index=False) # Write to log
+        Df_sg.to_sql('Container_data' ,con=con_ds ,schema="cof" ,if_exists='append' ,index=False) # Insert into SQL
+        Df_log.to_sql('Log' ,con=con_ds ,schema='dbo' ,if_exists='append' ,index=False) # Write to log
     
         shutil.move(File_complete_new ,Path_archive + File_name_new)
 except Exception as e:
@@ -60,4 +59,6 @@ except Exception as e:
          + str(e)
     } ,index=[0])
     # Create record in Email log if script fails and a files existed
-    df_email_err.to_sql('Email_log' ,con=Engine ,schema= 'dbo' ,if_exists='append' ,index=False)
+    df_email_err.to_sql('Email_log' ,con=con_ds ,schema= 'dbo' ,if_exists='append' ,index=False)
+    
+    
