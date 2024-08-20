@@ -8,8 +8,8 @@ import datetime
 import shutil
 
 
-Path_source = r'\\appsrv07\Python filer\Scan Global filer'
-Path_archive = r'\\appsrv07\Python filer\Scan Global filer\Arkiv'
+Path_source = r'\\tx-app\Python filer\Scan Global filer'
+Path_archive = r'\\tx-app\Python filer\Scan Global filer\Arkiv'
 File_name = r'\BKI Scan Global data'
 File_complete = Path_source + File_name + '.xlsx'
 File_timestamp = os.path.getctime(File_complete) # Creation time of file
@@ -27,9 +27,11 @@ Script_name = 'Scan Global datafiles.py'
 Cols_df_sg_rename = {'BKI REF#':'Kontraktnummer' ,'B/L':'Bill_of_lading' ,'NETTO VÆGT':'Nettovægt'
                      ,'BRUTTO VÆGT':'Bruttovægt' ,'CONTAINER NO.':'Containernummer' ,'SEGL':'Segl'
                      ,'DEPOT UD-LEVERING': 'Udlevering_depot' ,'UDLEVERING REFERENCE':'Udlevering_reference'
-                     ,'DEPOTIND-LEVERING':'Indlevering_depot','INDLEVERING REFERENCE':'Indlevering_reference'}
+                     ,'DEPOTIND-LEVERING':'Indlevering_depot','INDLEVERING REFERENCE':'Indlevering_reference'
+                     ,'LEVERINGS DATO':'Leveringsdato','DAGE PÅ HAVN':'Dage på havn'}
 Cols_df_sg = ['Kontraktnummer' ,'Containernummer' ,'Bill_of_lading' ,'Nettovægt' ,'Bruttovægt' ,'Segl' 
-              ,'Udlevering_depot' ,'Udlevering_reference' ,'Indlevering_depot' ,'Indlevering_reference', 'ETA AARHUS']
+              ,'Udlevering_depot' ,'Udlevering_reference' ,'Indlevering_depot' ,'Indlevering_reference', 'ETA AARHUS'
+              ,'Leveringsdato','Dage på havn']
 
 Df_log = pd.DataFrame(data= {'Date':Timestamp ,'Event':Script_name ,'Note': 'Filename: ' + File_name_new }, index=[0])
 
@@ -44,6 +46,7 @@ try:
         Df_sg = Df_sg.rename(columns=Cols_df_sg_rename) #Rename columns
         Df_sg = Df_sg[Cols_df_sg] # Limit columns to those present in SQL target table
         Df_sg["ETA AARHUS"] = Df_sg["ETA AARHUS"].apply(lambda x: x - 2) # Subtract 2 to get correct date for sql
+        Df_sg["Leveringsdato"] = Df_sg["Leveringsdato"].apply(lambda x: x - 2) # Subtract 2 to get correct date for sql
         Df_sg = Df_sg.replace({'nan': None , 'NONE': None}) # Convert NaN values to 0 before SQL insert
         Df_sg.loc[:, 'Timestamp'] = Timestamp
         Df_sg.loc[:, 'Filnavn'] = File_name_new  
