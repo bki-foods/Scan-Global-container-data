@@ -45,8 +45,10 @@ try:
         Df_sg.columns = Df_sg.columns.str.replace('\n', '') # Replace newline characters from column headers
         Df_sg = Df_sg.rename(columns=Cols_df_sg_rename) #Rename columns
         Df_sg = Df_sg[Cols_df_sg] # Limit columns to those present in SQL target table
-        Df_sg["ETA AARHUS"] = Df_sg["ETA AARHUS"].apply(lambda x: x - 2) # Subtract 2 to get correct date for sql
-        Df_sg["Leveringsdato"] = Df_sg["Leveringsdato"].apply(lambda x: x - 2) # Subtract 2 to get correct date for sql
+
+        Df_sg["Leveringsdato"] = pd.to_datetime(Df_sg["Leveringsdato"], origin="1899-12-30", unit="D")
+        Df_sg["ETA AARHUS"] = pd.to_datetime(Df_sg["ETA AARHUS"], origin="1899-12-30", unit="D")
+        
         Df_sg = Df_sg.replace({'nan': None , 'NONE': None}) # Convert NaN values to 0 before SQL insert
         Df_sg.loc[:, 'Timestamp'] = Timestamp
         Df_sg.loc[:, 'Filnavn'] = File_name_new  
